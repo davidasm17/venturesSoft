@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.prueba.venturessoft.dto.ApiResponse;
 import com.prueba.venturessoft.model.HuCatMoneda;
 import com.prueba.venturessoft.service.MonedaService;
 
@@ -57,8 +58,8 @@ public class HuCatMonedaController {
 
     @DeleteMapping("/{numCia}/{claveMoneda}")
     @Operation(summary = "Eliminar moneda")
-    public ResponseEntity<Void> eliminarMoneda(@PathVariable Integer numCia, @PathVariable String claveMoneda) {
+    public ResponseEntity<ApiResponse<Void>> eliminarMoneda(@PathVariable Integer numCia, @PathVariable String claveMoneda) {
         monedaService.eliminarMoneda(numCia, claveMoneda);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(new ApiResponse<>("Moneda eliminada correctamente", null, true));
     }
 }

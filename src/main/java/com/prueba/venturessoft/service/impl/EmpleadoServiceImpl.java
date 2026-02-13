@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.prueba.venturessoft.dto.EmpleadoDetalleDTO;
 import com.prueba.venturessoft.exception.RecursoNoEncontradoException;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class EmpleadoServiceImpl implements EmpleadoService {
 
     private final EmpleadoRepository empleadoRepository;
@@ -26,6 +28,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     private final MonedaRepository monedaRepository;
 
     @Override
+    @Transactional
     public HuEmpls crearEmpleado(HuEmpls empleado) {
         return empleadoRepository.save(empleado);
     }
@@ -36,6 +39,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     }
 
     @Override
+    @Transactional
     public HuEmpls actualizarEmpleado(Integer numCia, Integer numEmp, HuEmpls empleado) {
         HuEmplsId id = new HuEmplsId(numCia, numEmp);
         if (!empleadoRepository.existsById(id)) {
@@ -47,6 +51,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     }
 
     @Override
+    @Transactional
     public void eliminarEmpleado(Integer numCia, Integer numEmp) {
     	HuEmplsId id = new HuEmplsId(numCia, numEmp);
     	if(!empleadoRepository.existsById(id)) {
@@ -77,6 +82,12 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     public List<HuEmpls> listarEmpleadosPorMoneda(Integer numCia, String claveMoneda) {
         return empleadoRepository.findByIdNumCiaAndClaveMoneda(numCia, claveMoneda);
     }
+
+	@Override
+	public List<HuEmpls> listarEmpleados() {
+		return empleadoRepository.findAll();
+		
+	}
     
 
 }

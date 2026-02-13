@@ -86,7 +86,11 @@ public class Logging {
             Object bodyToLog = result;
             
             if (result instanceof ResponseEntity<?>) {
-                bodyToLog = ((ResponseEntity<?>) result).getBody();
+            	ResponseEntity<?> response = (ResponseEntity<?>) result;
+            	if (response.getStatusCode().is2xxSuccessful() && response.getBody() == null) {
+            		 return;
+            	}
+                bodyToLog = response.getBody();
             }
 
             if (bodyToLog == null) {

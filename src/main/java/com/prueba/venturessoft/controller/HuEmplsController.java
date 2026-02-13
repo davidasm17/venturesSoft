@@ -51,9 +51,15 @@ public class HuEmplsController {
 
     @DeleteMapping("/{numCia}/{numEmp}")
     @Operation(summary = "Eliminación de empleado")
-    public ResponseEntity<Void> eliminarEmpleado(@PathVariable Integer numCia, @PathVariable Integer numEmp) {
+    public ResponseEntity<ApiResponse<Void>> eliminarEmpleado(@PathVariable Integer numCia, @PathVariable Integer numEmp) {
         empleadoService.eliminarEmpleado(numCia, numEmp);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(new ApiResponse<>("Empleado eliminado correctamente", null, true));
+    }
+    
+    @GetMapping
+    @Operation(summary = "Listar todos los empleados")
+    public ResponseEntity<List<HuEmpls>>listarEmpleados(){
+    	return ResponseEntity.ok(empleadoService.listarEmpleados());
     }
 
     @GetMapping("/{numCia}/{numEmp}")
