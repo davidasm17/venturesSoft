@@ -79,6 +79,21 @@ public class HuCatMonedaControllerTest {
     			.andExpect(status().isCreated())
     			.andExpect(jsonPath("$.descripcion").value("Peso"));
     }
+
+    @Test
+    public void testCrearMonedaDuplicada() throws Exception {
+        HuCatMonedaId id = new HuCatMonedaId(1, "MXN");
+        HuCatMoneda moneda = new HuCatMoneda(id, "Peso", "$", "A");
+        
+        when(monedaService.crearMoneda(any(HuCatMoneda.class)))
+                .thenThrow(new com.prueba.venturessoft.exception.RecursoDuplicadoException("La moneda ya existe"));
+        
+        mockMvc.perform(post("/api/monedas")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(moneda)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.mensaje").value("La moneda ya existe"));
+    }
     
     @Test
     public void testActualizarMoneda() throws Exception {

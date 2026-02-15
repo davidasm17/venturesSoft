@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.prueba.venturessoft.dto.ApiResponse;
@@ -72,5 +73,14 @@ public class HuEmplsController {
     @Operation(summary = "Listar empleados por moneda (numCia, claveMoneda)")
     public ResponseEntity<List<HuEmpls>> listarEmpleadosPorMoneda(@PathVariable Integer numCia, @PathVariable String claveMoneda) {
         return ResponseEntity.ok(empleadoService.listarEmpleadosPorMoneda(numCia, claveMoneda));
+    }
+    
+    
+    @GetMapping("/listar/apellido")
+    @Operation(summary = "Listar empleados por apellido")
+    public ResponseEntity<List<HuEmpls>>buscar(@RequestParam String apellido){
+    	List<HuEmpls> resultado = empleadoService.buscarPorApellido(apellido);
+    	
+    	return  ResponseEntity.ok(resultado);
     }
 }

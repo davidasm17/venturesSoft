@@ -64,6 +64,27 @@ public class HuEmplsControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.datos.nombre").value("Juan"));
     }
+
+    @Test
+    public void testCrearEmpleadoDuplicado() throws Exception {
+        HuEmplsId id = new HuEmplsId(1, 100);
+        HuEmpls emp = new HuEmpls();
+        emp.setId(id);
+        emp.setNombre("Juan");
+        emp.setApellidoPaterno("Perez");
+        emp.setApellidoMaterno("Lopez");
+        emp.setClaveMoneda("MXN");
+        emp.setPuesto("Dev");
+
+        when(empleadoService.crearEmpleado(any(HuEmpls.class)))
+                .thenThrow(new com.prueba.venturessoft.exception.RecursoDuplicadoException("El empleado ya existe"));
+
+        mockMvc.perform(post("/api/empleados")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(emp)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.mensaje").value("El empleado ya existe"));
+    }
     
     @Test
     public void testActualizarEmpleado() throws Exception {

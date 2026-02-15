@@ -10,5 +10,6 @@ import com.prueba.venturessoft.model.entity.HuEmplsId;
 public interface EmpleadoRepository extends JpaRepository<HuEmpls, HuEmplsId>{
 	
 	List<HuEmpls> findByIdNumCiaAndClaveMoneda(Integer numCia, String claveMoneda);
+	List<HuEmpls> findByApellidoPaterno(String apellidoPaterno);
 
 }

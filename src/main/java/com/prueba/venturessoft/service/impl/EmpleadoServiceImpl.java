@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.prueba.venturessoft.dto.EmpleadoDetalleDTO;
+import com.prueba.venturessoft.exception.RecursoDuplicadoException;
 import com.prueba.venturessoft.exception.RecursoNoEncontradoException;
 import com.prueba.venturessoft.model.HuCatMoneda;
 import com.prueba.venturessoft.model.HuEmpls;
@@ -30,6 +31,10 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     @Override
     @Transactional
     public HuEmpls crearEmpleado(HuEmpls empleado) {
+        if (empleadoRepository.existsById(empleado.getId())) {
+            throw new RecursoDuplicadoException("El empleado con ID " + empleado.getId().getNumEmp() +
+                    " y CIA " + empleado.getId().getNumCia() + " ya existe.");
+        }
         return empleadoRepository.save(empleado);
     }
 
@@ -87,6 +92,11 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 	public List<HuEmpls> listarEmpleados() {
 		return empleadoRepository.findAll();
 		
+	}
+	
+	@Override
+	public List<HuEmpls> buscarPorApellido(String apellido){
+		return empleadoRepository.findByApellidoPaterno(apellido);
 	}
     
 

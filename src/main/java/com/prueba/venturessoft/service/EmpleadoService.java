@@ -16,4 +16,5 @@ public interface EmpleadoService {
     List<HuEmpls> listarEmpleados();
 	EmpleadoDetalleDTO obtenerDetalleEmpleado(Integer numCia, Integer numEmp);
 	List<HuEmpls> listarEmpleadosPorMoneda(Integer numCia, String claveMoneda);
+	List<HuEmpls>buscarPorApellido(String apellidoPaterno);
 }

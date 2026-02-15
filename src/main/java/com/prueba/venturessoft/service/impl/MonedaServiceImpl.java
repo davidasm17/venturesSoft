@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.prueba.venturessoft.exception.RecursoDuplicadoException;
 import com.prueba.venturessoft.exception.RecursoNoEncontradoException;
 import com.prueba.venturessoft.model.HuCatMoneda;
 import com.prueba.venturessoft.model.entity.HuCatMonedaId;
@@ -28,6 +29,10 @@ public class MonedaServiceImpl implements MonedaService {
     @Override
     @Transactional
     public HuCatMoneda crearMoneda(HuCatMoneda moneda) {
+        if (monedaRepository.existsById(moneda.getId())) {
+            throw new RecursoDuplicadoException("La moneda con ID " + moneda.getId().getClaveMoneda() +
+                    " y CIA " + moneda.getId().getNumCia() + " ya existe.");
+        }
         return monedaRepository.save(moneda);
     }
 
